@@ -1,5 +1,5 @@
 var SHAPES=['\u25b2','\u25c6','\u25cf','\u25a0'];
-var gamePin=null,playerId=null,playerName=null,playerQuizData=null,currentQuestionIndex=-1,hasAnswered=false,timerInterval=null,questionStartTime=0;
+var gamePin=null,playerId=null,playerName=null,playerQuizData=null,currentQuestionIndex=-1,hasAnswered=false,timerInterval=null,localStartTime=0,currentTimeLimit=20;
 
 function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.add('hidden')});document.getElementById(id).classList.remove('hidden')}
 
@@ -41,7 +41,7 @@ function listenForGameState(){
     switch(status){
       case 'lobby':break;
       case 'question':
-        if(qIndex!==currentQuestionIndex){currentQuestionIndex=qIndex;hasAnswered=false;questionStartTime=game.questionStartTime;showPlayerQuestion(qIndex);}
+        if(qIndex!==currentQuestionIndex){currentQuestionIndex=qIndex;hasAnswered=false;showPlayerQuestion(qIndex);}
         break;
       case 'results':if(timerInterval){clearInterval(timerInterval);timerInterval=null;}showFeedback(currentQuestionIndex);break;
       case 'leaderboard':updateRank();break;
@@ -63,6 +63,7 @@ function showPlayerQuestion(index){
       var btn=document.createElement('button');
       btn.type='button';
       btn.className='answer-block ans-'+idx;
+      btn.style.cssText='border:none;outline:none;font-family:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;';
       var opt=q.options[idx];
       if(opt&&opt.trim()){btn.innerHTML='<span class="ans-text">'+escapeHtml(opt)+'</span>';}
       else{btn.innerHTML='<span class="shape">'+SHAPES[idx]+'</span>';}
@@ -71,25 +72,27 @@ function showPlayerQuestion(index){
     })(i);
   }
   document.getElementById('p-status').classList.add('hidden');
+  localStartTime=Date.now();
+  currentTimeLimit=q.timeLimit;
   startLocalTimer(q.timeLimit);
 }
 
 function startLocalTimer(timeLimit){
   if(timerInterval)clearInterval(timerInterval);
   var circle=document.getElementById('p-timer');circle.classList.remove('urgent');
-  var update=function(){
-    var elapsed=(Date.now()-questionStartTime)/1000;
+  circle.textContent=timeLimit;
+  timerInterval=setInterval(function(){
+    var elapsed=(Date.now()-localStartTime)/1000;
     var remaining=Math.max(0,Math.ceil(timeLimit-elapsed));
     circle.textContent=remaining;
     if(remaining<=5)circle.classList.add('urgent');
     if(remaining<=0){clearInterval(timerInterval);timerInterval=null;if(!hasAnswered)disableAnswerBlocks();}
-  };
-  update();timerInterval=setInterval(update,500);
+  },500);
 }
 
 function submitAnswer(answerIndex){
   if(hasAnswered)return;hasAnswered=true;
-  var timeTaken=Date.now()-questionStartTime;
+  var timeTaken=Date.now()-localStartTime;
   db.ref('games/'+gamePin+'/players/'+playerId+'/answers/'+currentQuestionIndex).set({answer:answerIndex,timeTaken:timeTaken});
   var blocks=document.querySelectorAll('#p-answers .answer-block');
   blocks.forEach(function(b,i){b.disabled=true;b.classList.add('disabled');if(i===answerIndex)b.classList.add('selected');});
