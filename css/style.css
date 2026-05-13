@@ -55,3 +55,4 @@ body.flash-correct{animation:flashGreen .6s ease}body.flash-wrong{animation:flas
 .status{text-align:center;font-size:1rem;opacity:.8;margin:16px 0}.section-title{font-size:1.4rem;font-weight:800;text-align:center;margin:24px 0 12px}
 .hidden{display:none!important}.text-center{text-align:center}.mt-1{margin-top:10px}.mt-2{margin-top:20px}.mb-1{margin-bottom:10px}.mb-2{margin-bottom:20px}
 @media(max-width:600px){.app-title{font-size:1.8rem}.pin-number{font-size:2.8rem;letter-spacing:8px}.question-text{font-size:1.3rem}.timer-circle{width:75px;height:75px;font-size:2rem}.btn{padding:12px 24px;font-size:1rem}}
+button.answer-block{border:none;outline:none;font-family:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
