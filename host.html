@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Host - JCR Quiz Arena</title><link rel="stylesheet" href="css/style.css"></head><body>
+<div class="navbar"><div class="navbar-brand"><img src="assets/JCR.jpg" alt="JCR" class="logo-sm"><span>JCR Quiz Arena</span></div><a href="index.html" class="btn btn-outline btn-sm">Home</a></div>
+<div class="container">
+<div id="screen-setup" class="screen"><div class="card" style="text-align:center"><h2 class="section-title">Host a Game</h2><div class="form-group" style="max-width:400px;margin:20px auto"><label style="color:var(--text-light)">Select a Quiz</label><select id="quiz-select"><option value="">-- Loading --</option></select></div><button id="btn-create-game" class="btn btn-red" onclick="createGame()" disabled>Create Game</button></div></div>
+<div id="screen-lobby" class="screen hidden"><div style="text-align:center"><p class="pin-label">Game PIN</p><p class="pin-number" id="lobby-pin"></p></div><div class="qr-container"><div id="qr-code"></div></div><p class="status">Players will appear here as they join...</p><p class="player-count" id="player-count">0 players</p><div class="player-list" id="player-list"></div><div style="text-align:center;margin-top:20px"><button id="btn-start-game" class="btn btn-green btn-full" onclick="startGame()" disabled>Start Game</button></div></div>
+<div id="screen-question" class="screen hidden"><div class="question-header"><p class="question-counter" id="q-counter"></p><p class="question-text" id="q-text"></p></div><div class="timer-container"><div class="timer-circle" id="timer-circle">--</div></div><div class="answer-grid" id="q-answers"></div><p class="answers-received" id="answers-received"></p></div>
+<div id="screen-results" class="screen hidden"><div class="question-header"><p class="question-counter" id="r-counter"></p><p class="question-text" id="r-text"></p></div><div class="answer-grid" id="r-answers"></div><h3 class="section-title" style="margin-top:30px">Answer Distribution</h3><div id="r-distribution" style="max-width:500px;margin:0 auto"></div><div style="text-align:center;margin-top:24px"><button class="btn btn-blue btn-full" onclick="showLeaderboard()">Show Leaderboard</button></div></div>
+<div id="screen-leaderboard" class="screen hidden"><h2 class="section-title">Leaderboard</h2><ul class="leaderboard-list" id="lb-list"></ul><div style="text-align:center;margin-top:24px"><button id="btn-next" class="btn btn-red btn-full" onclick="nextQuestion()">Next Question</button></div></div>
+<div id="screen-podium" class="screen hidden"><h2 class="section-title">Final Results</h2><div class="podium-container" id="podium"></div><h3 class="section-title" style="margin-top:40px">Full Results</h3><table class="results-table" id="full-results"></table><div style="text-align:center;margin-top:30px"><a href="index.html" class="btn btn-outline btn-full">Back to Home</a></div></div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="js/host.js"></script>
+</body></html>

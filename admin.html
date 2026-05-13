@@ -1,0 +1,18 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Admin - JCR Quiz Arena</title><link rel="stylesheet" href="css/style.css"></head><body class="admin-body">
+<div id="login-overlay" class="login-overlay"><div class="login-box"><img src="assets/JCR.jpg" alt="JCR" style="width:80px;border-radius:50%;margin-bottom:16px"><h2>Admin Login</h2>
+<input type="password" id="password-input" placeholder="Enter admin password" style="width:100%"><br><button class="btn btn-red btn-full mt-1" onclick="attemptLogin()">Login</button>
+<p id="login-error" class="login-error hidden"></p><p style="margin-top:16px"><a href="index.html" style="color:#999;font-size:.85rem">Back to Home</a></p></div></div>
+<div id="admin-main" class="hidden"><div class="admin-header"><img src="assets/JCR.jpg" alt="JCR" class="logo-sm"><h1>JCR Quiz Arena - Admin</h1><a href="index.html" style="margin-left:auto;font-size:.85rem;opacity:.7">Home</a></div>
+<div class="container" style="max-width:700px;padding-top:20px"><div id="quiz-list-section"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><h2>Your Quizzes</h2>
+<button class="btn btn-red btn-sm" onclick="showEditor()">+ New Quiz</button></div><div id="quiz-list"><p style="color:#999;text-align:center">Loading quizzes...</p></div></div>
+<div id="quiz-editor" class="hidden"><h2 id="editor-title">New Quiz</h2><input type="hidden" id="edit-quiz-id" value="">
+<div class="form-group"><label>Quiz Title</label><input type="text" id="quiz-title" placeholder="e.g. Food Safety Level 1"></div>
+<h3 style="margin-bottom:12px">Questions</h3><div id="questions-container"></div>
+<button class="btn btn-outline btn-sm mt-1" style="color:var(--jcr-black);border-color:#ccc" onclick="addQuestionCard()">+ Add Question</button>
+<div style="display:flex;gap:12px;margin-top:24px"><button class="btn btn-green" onclick="saveQuiz()">Save Quiz</button><button class="btn btn-outline btn-sm" style="color:#999;border-color:#ccc" onclick="cancelEditor()">Cancel</button></div>
+</div></div></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/admin.js"></script>
+</body></html>
