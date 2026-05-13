@@ -60,8 +60,9 @@ function showPlayerQuestion(index){
   var grid=document.getElementById('p-answers');grid.innerHTML='';
   q.options.forEach(function(opt,i){
     var block=document.createElement('div');block.className='answer-block ans-'+i;
-    block.innerHTML='<span class="shape">'+SHAPES[i]+'</span><span>'+escapeHtml(opt)+'</span>';
-    block.addEventListener('click',function(){submitAnswer(i);});
+    if(opt&&opt.trim()){block.innerHTML='<span class="ans-text">'+escapeHtml(opt)+'</span>';}
+    else{block.innerHTML='<span class="shape">'+SHAPES[i]+'</span>';}
+    block.setAttribute('onclick','submitAnswer('+i+')');
     grid.appendChild(block);
   });
   document.getElementById('p-status').classList.add('hidden');
