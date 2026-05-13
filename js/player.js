@@ -58,13 +58,18 @@ function showPlayerQuestion(index){
   document.getElementById('p-q-counter').textContent='Question '+(index+1)+' of '+playerQuizData.questions.length;
   document.getElementById('p-q-text').textContent=q.text;
   var grid=document.getElementById('p-answers');grid.innerHTML='';
-  q.options.forEach(function(opt,i){
-    var block=document.createElement('div');block.className='answer-block ans-'+i;
-    if(opt&&opt.trim()){block.innerHTML='<span class="ans-text">'+escapeHtml(opt)+'</span>';}
-    else{block.innerHTML='<span class="shape">'+SHAPES[i]+'</span>';}
-    block.setAttribute('onclick','submitAnswer('+i+')');
-    grid.appendChild(block);
-  });
+  for(var i=0;i<q.options.length;i++){
+    (function(idx){
+      var btn=document.createElement('button');
+      btn.type='button';
+      btn.className='answer-block ans-'+idx;
+      var opt=q.options[idx];
+      if(opt&&opt.trim()){btn.innerHTML='<span class="ans-text">'+escapeHtml(opt)+'</span>';}
+      else{btn.innerHTML='<span class="shape">'+SHAPES[idx]+'</span>';}
+      btn.onclick=function(){submitAnswer(idx);};
+      grid.appendChild(btn);
+    })(i);
+  }
   document.getElementById('p-status').classList.add('hidden');
   startLocalTimer(q.timeLimit);
 }
@@ -87,14 +92,14 @@ function submitAnswer(answerIndex){
   var timeTaken=Date.now()-questionStartTime;
   db.ref('games/'+gamePin+'/players/'+playerId+'/answers/'+currentQuestionIndex).set({answer:answerIndex,timeTaken:timeTaken});
   var blocks=document.querySelectorAll('#p-answers .answer-block');
-  blocks.forEach(function(b,i){b.classList.add('disabled');if(i===answerIndex)b.classList.add('selected');});
+  blocks.forEach(function(b,i){b.disabled=true;b.classList.add('disabled');if(i===answerIndex)b.classList.add('selected');});
   var statusEl=document.getElementById('p-status');
   statusEl.textContent='\u2705 Answer submitted! Waiting for results...';
   statusEl.style.color='';statusEl.classList.remove('hidden');
 }
 
 function disableAnswerBlocks(){
-  document.querySelectorAll('#p-answers .answer-block').forEach(function(b){b.classList.add('disabled');});
+  document.querySelectorAll('#p-answers .answer-block').forEach(function(b){b.disabled=true;b.classList.add('disabled');});
   var statusEl=document.getElementById('p-status');
   statusEl.textContent='\u23F0 Time\'s up!';statusEl.classList.remove('hidden');
 }
