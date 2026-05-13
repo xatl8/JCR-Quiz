@@ -59,20 +59,18 @@ function addQuestionCard(data){
   var n=questionCounter,ct=document.getElementById('questions-container'),card=document.createElement('div');
   card.className='question-card';
   var t=data?data.text:'',opts=data?data.options:['','','',''],cor=data?data.correct:-1,tl=data?data.timeLimit:20;
-  var oh='';
+  var h='';
+  h+='<button class="remove-q-btn" onclick="removeQuestionCard(this)">&times;</button>';
+  h+='<h4>Question <span class="q-number">'+n+'</span></h4>';
+  h+='<div class="form-group"><input type="text" class="q-text-input" placeholder="Enter your question" value="'+escapeHtml(t)+'"></div>';
   for(var i=0;i<4;i++){
-    oh+='<div class="option-row"><span style="font-size:1.2rem;width:24px;text-align:center">'+SHAPES[i]+'</span>';
-    oh+='<input type="text" class="opt-input" placeholder="Option '+(i+1)+' ('+COLORS[i]+')" value="'+escapeHtml(opts[i])+'">';
-    oh+='<input type="radio" name="correct-'+n+'" value="'+i+'"'+(cor===i?' checked':'')+'><label>Correct</label></div>';
+    h+='<div class="option-row"><span style="font-size:1.2rem;width:24px;text-align:center">'+SHAPES[i]+'</span>';
+    h+='<input type="text" class="opt-input" placeholder="Option '+(i+1)+' ('+COLORS[i]+')" value="'+escapeHtml(opts[i])+'">';
+    h+='<input type="radio" name="correct-'+n+'" value="'+i+'"'+(cor===i?' checked':'')+'><label>Correct</label></div>';
   }
-  card.innerHTML='<button class="remove-q-btn" onclick="removeQuestionCard(this)">&times;</button>';
-  card.innerHTML+='<h4>Question <span class="q-number">'+n+'</span></h4>';
-  card.innerHTML+='<div class="form-group"><input type="text" class="q-text-input" placeholder="Enter your question" value="'+escapeHtml(t)+'"></div>';
-  card.innerHTML+=oh;
-  card.innerHTML+='<div class="form-group" style="margin-top:12px"><label>Time Limit</label><select class="time-select">';
-  card.innerHTML+='<option value="10"'+(tl===10?' selected':'')+'>10s</option>';
-  card.innerHTML+='<option value="20"'+(tl===20?' selected':'')+'>20s</option>';
-  card.innerHTML+='<option value="30"'+(tl===30?' selected':'')+'>30s</option></select></div>';
+  h+='<div class="form-group" style="margin-top:12px"><label>Time Limit (seconds)</label>';
+  h+='<input type="number" class="time-input" min="5" max="120" step="5" value="'+tl+'" style="width:100px"></div>';
+  card.innerHTML=h;
   ct.appendChild(card);
 }
 
@@ -95,7 +93,7 @@ function saveQuiz(){
     var optInputs=card.querySelectorAll('.opt-input');
     var options=Array.from(optInputs).map(function(inp){return inp.value.trim();});
     var radios=card.querySelectorAll('input[type="radio"]');
-    var timeLimit=parseInt(card.querySelector('.time-select').value);
+    var timeLimit=parseInt(card.querySelector('.time-input').value)||20;
     var correct=-1;
     radios.forEach(function(r){if(r.checked)correct=parseInt(r.value);});
     if(!text){alert('Q'+(idx+1)+': Enter question text.');valid=false;return;}
