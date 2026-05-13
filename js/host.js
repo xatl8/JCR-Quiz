@@ -67,7 +67,9 @@ function showQuestion(index){
   var grid=document.getElementById('q-answers');grid.innerHTML='';
   q.options.forEach(function(opt,i){
     var block=document.createElement('div');block.className='answer-block ans-'+i;
-    block.innerHTML='<span class="shape">'+SHAPES[i]+'</span><span>'+escapeHtml(opt)+'</span>';grid.appendChild(block);
+    if(opt&&opt.trim()){block.innerHTML='<span class="ans-text">'+escapeHtml(opt)+'</span>';}
+    else{block.innerHTML='<span class="shape">'+SHAPES[i]+'</span>';}
+    grid.appendChild(block);
   });
   document.getElementById('answers-received').textContent='0 of '+totalPlayers+' answered';
   var startTime=Date.now();
@@ -106,7 +108,9 @@ function showResults(){
   var grid=document.getElementById('r-answers');grid.innerHTML='';
   q.options.forEach(function(opt,i){
     var block=document.createElement('div');block.className='answer-block ans-'+i+(i===q.correct?' correct-highlight':' dimmed');
-    block.innerHTML='<span class="shape">'+SHAPES[i]+'</span><span>'+escapeHtml(opt)+'</span>';grid.appendChild(block);
+    if(opt&&opt.trim()){block.innerHTML='<span class="ans-text">'+escapeHtml(opt)+'</span>';}
+    else{block.innerHTML='<span class="shape">'+SHAPES[i]+'</span>';}
+    grid.appendChild(block);
   });
   db.ref('games/'+currentGamePin+'/players').once('value',function(snap){
     var players=snap.val()||{},dist=[0,0,0,0],total=0;
@@ -118,7 +122,7 @@ function showResults(){
     var distEl=document.getElementById('r-distribution');distEl.innerHTML='';
     for(var i=0;i<4;i++){
       var pct=total>0?Math.round((dist[i]/total)*100):0;
-      distEl.innerHTML+='<div class="dist-bar-container"><div class="dist-bar-label">'+SHAPES[i]+'</div><div class="dist-bar-track"><div class="dist-bar-fill ans-'+i+'" style="width:'+pct+'%">'+(pct>10?pct+'%':'')+'</div></div><div class="dist-count">'+dist[i]+(i===q.correct?' \u2713':'')+'</div></div>';
+      distEl.innerHTML+='<div class="dist-bar-container"><div class="dist-bar-label">'+SHAPES[i]+'</div><div class="dist-bar-track"><div class="dist-bar-fill ans-'+i+'" style="width:'+pct+'%">'+( pct>10?pct+'%':'')+'</div></div><div class="dist-count">'+dist[i]+(i===q.correct?' \u2713':'')+'</div></div>';
     }
   });
 }
